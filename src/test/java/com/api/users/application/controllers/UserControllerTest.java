@@ -4,18 +4,18 @@ import com.api.users.application.request.CreateUserRequest;
 import com.api.users.application.request.PhoneRequest;
 import com.api.users.domain.entities.Phone;
 import com.api.users.domain.entities.User;
-import com.api.users.domain.services.DomainUserService;
-import com.api.users.domain.services.UserService;
 import com.api.users.domain.valueobjects.*;
 import org.junit.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.testcontainers.junit.jupiter.Testcontainers;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
@@ -25,30 +25,23 @@ import java.util.UUID;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.*;
 
-@ExtendWith(SpringExtension.class)
-@WebFluxTest(controllers = UserController.class)
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Testcontainers
+@AutoConfigureWebTestClient
+@ActiveProfiles("test")
 public class UserControllerTest {
     @Autowired
     private WebTestClient webTestClient;
 
-    @MockBean
-    private UserService userService;
-
     @Test
     public void testRegisterUser() {
-        User user = buildUser();
-
-        given(userService.createUser(any(User.class)))
-                .willReturn(Mono.just(user));
-
-        WebTestClient.ResponseSpec responseSpec = webTestClient.post()
+        webTestClient.post()
                 .uri("/api/user")
                 .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
-                .body(Mono.just(buildCreateUserRequest()), CreateUserRequest.class)
-                .exchange();
-
-        responseSpec.expectStatus().isCreated();
+                .body(BodyInserters.fromValue(buildCreateUserRequest()))
+                .exchange()
+                .expectStatus().isOk();
     }
 
     private CreateUserRequest buildCreateUserRequest() {
