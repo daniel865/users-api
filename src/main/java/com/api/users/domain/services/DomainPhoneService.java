@@ -47,16 +47,4 @@ public class DomainPhoneService implements PhoneService {
                         )
                 );
     }
-
-    @Override
-    public Flux<Phone> getPhones(User user) {
-        Flux<PhoneRecord> phoneRecords = phoneRepository.findByUserId(UUID.fromString(user.getUserId().value()));
-        return phoneRecords.map(phoneRecord ->
-            new Phone(
-                    new PhoneNumber(phoneRecord.getNumber()),
-                    new CityCode(phoneRecord.getCityCode()),
-                    new CountryCode(phoneRecord.getCountryCode())
-            )
-        );
-    }
 }

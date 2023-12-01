@@ -9,7 +9,7 @@ de datos e pueden encontrar:
 ### Como Probar
 El API provee un swagger para probar el endpoint:
 
-`http://localhost:8080/swagger-ui/`
+`http://localhost:8080/webjars/swagger-ui/index.html`
 
 ### Arquitectura
 

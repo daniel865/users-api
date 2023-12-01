@@ -7,14 +7,17 @@ import com.api.users.application.exceptions.InvalidPasswordException;
 import com.api.users.application.request.CreateUserRequest;
 import com.api.users.application.response.UserCreatedResponse;
 import com.api.users.domain.services.UserService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
+@CrossOrigin(origins = "http://localhost:8081")
 @RestController
 @RequestMapping(UserController.USER_PATH)
 public class UserController {
@@ -32,6 +35,13 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Operation(summary = "Registrar Usuario")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "User Created",
+            content = { @Content(mediaType = "application/json",
+            schema = @Schema(implementation = UserCreatedResponse.class))}),
+        @ApiResponse(responseCode = "400", description = "request invalido", content = @Content)
+    })
     @PostMapping
     public Mono<UserCreatedResponse> register(@RequestBody Mono<CreateUserRequest> request) {
         return request.flatMap(createUserRequest -> {

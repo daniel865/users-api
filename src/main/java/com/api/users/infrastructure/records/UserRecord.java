@@ -7,16 +7,20 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.relational.core.mapping.Table;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.UUID;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "User")
+@Table(name = "Users")
 public class UserRecord {
-    @Id
     private UUID id;
     private String name;
     private String email;
@@ -33,14 +37,9 @@ public class UserRecord {
             user.getEmail().value(),
             user.getPassword().value(),
             user.getIsActive().value(),
-            convertDate(user.getCreatedAt().value()),
-            convertDate(user.getModifiedAt().value()),
-            convertDate(user.getLastLogin().value())
+            LocalDateTime.parse(user.getCreatedAt().value()),
+            LocalDateTime.parse(user.getModifiedAt().value()),
+            LocalDateTime.parse(user.getLastLogin().value())
         );
-    }
-
-    private static LocalDateTime convertDate(String date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        return LocalDateTime.parse(date, formatter);
     }
 }

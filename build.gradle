@@ -24,9 +24,8 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-data-r2dbc'
-	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
 	implementation 'org.springframework.boot:spring-boot-starter-webflux'
-	implementation 'org.liquibase:liquibase-core'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework:spring-jdbc'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.h2database:h2'
@@ -40,7 +39,14 @@ dependencies {
 	testImplementation 'org.testcontainers:r2dbc'
 
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.12.3'
-	implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
+	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.12.3'
+	runtimeOnly group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.12.3'
+
+
+
+	implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webflux-ui', version: '2.1.0'
+
+	implementation group: 'name.nkonev.r2dbc-migrate', name: 'r2dbc-migrate-spring-boot-starter', version: '2.10.3'
 
 }
 

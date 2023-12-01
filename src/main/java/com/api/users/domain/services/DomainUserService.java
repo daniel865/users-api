@@ -27,7 +27,7 @@ public class DomainUserService implements UserService {
     private TokenService tokenService;
 
     @Autowired
-    private JwtService jwtService;
+    private JWTUtil jwtUtil;
 
     public Mono<User> createUser(User user) {
         return userRepository.findByEmail(user.getEmail().value())
@@ -41,7 +41,7 @@ public class DomainUserService implements UserService {
                 UserRecord userRecordToSave = UserRecord.from(user);
                 return userRepository.save(userRecordToSave)
                         .map(userRecord -> {
-                            String token = jwtService.generateToken(userRecord.getEmail());
+                            String token = jwtUtil.generateToken(userRecord.getEmail());
                             User createdUser = UserMapper.mapTo(userRecord, user, new Token(token));
                             phoneService.addPhones(createdUser);
                             tokenService.addToken(createdUser);
