@@ -25,6 +25,9 @@ encontrado en:
 
 `src/main/resources/application.properties`
 
+Por defecto el email esta configurado para pertenecer al dominio `@testdomain.com` y el password debe ser numerico de 
+cuatro digitos.
+
 ### Arquitectura
 
 ![Arquitectura API](Diagrama.png)
